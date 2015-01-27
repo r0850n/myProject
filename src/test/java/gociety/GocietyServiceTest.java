@@ -15,16 +15,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-
-
 public class GocietyServiceTest {
 
 	private static final String CAST_EVIWARE_AS_SIGNED_INTEGER = "CAST('eviware' AS SIGNED INTEGER)";
 
-
 	private static final String CLASIC = "' or 1=1--";
-	
-	
+
 	private StringBuffer verificationErrors = new StringBuffer();
 	private WebDriver driver;
 	private GocietyHomePage homePage;
@@ -51,66 +47,73 @@ public class GocietyServiceTest {
 	@Test
 	public void startHomePageTest() throws Exception {
 		goToHomePage();
-		
-		homePage= new GocietyHomePage(driver);
+
+		homePage = new GocietyHomePage(driver);
 		System.out.println(homePage.getButtonBecomeAMember().getText());
 		assertTrue(driver.getTitle().equals("Gociety"));
 	}
-	
+
 	@Test
-	public void startLoginPageTest(){
+	public void startLoginPageTest() {
 		goToLoginPage();
-		
+
 		assertTrue(driver.getTitle().equals("Gociety"));
 	}
 
 	@Test
 	public void badlLoginTest() throws Exception {
 		goToLoginPage();
-		loginPage= new GocietyLoginPage(driver);
+		loginPage = new GocietyLoginPage(driver);
 		loginPage.loginAs("aaa@wp.pl", "aaa");
-		
-		System.out.println(loginPage.getErrorLogin().getText()); 
+
+		System.out.println(loginPage.getErrorLogin().getText());
 		assertTrue(loginPage.getErrorLogin().isDisplayed());
 	}
-	
-	
+
 	@Test
 	public void testGetAll() throws Exception {
 		goToHomePage();
-		homePage= new GocietyHomePage(driver);
-		
+		homePage = new GocietyHomePage(driver);
+
 		System.out.println(homePage.getAllElementsString());
 	}
-	
-	
+
 	@Test
 	public void testSqlInjection_Clasic() throws Exception {
-		login(CLASIC,CLASIC);
-	
+		login(CLASIC, CLASIC);
+
 	}
+
 	@Test
 	public void testSqlInjection_Type_Conversion() throws Exception {
-      login(CAST_EVIWARE_AS_SIGNED_INTEGER,"yesitdoes!");
-	
-      assertTrue(loginPage.getErrorLogin().isDisplayed());
+		login(CAST_EVIWARE_AS_SIGNED_INTEGER, "yesitdoes!");
+
+		assertTrue(loginPage.getErrorLogin().isDisplayed());
 	}
-	
+
 	@Test
 	public void testSqlInjection_LogInAndLogIn() throws Exception {
-      for(int i=0;i<=2;i++){
-    	  testSqlInjection_Clasic();
-      }
-	
+		for (int i = 0; i <= 2; i++) {
+			testSqlInjection_Clasic();
+		}
+
 	}
+
 	@Test
 	public void mainPageTestSelectActivity() throws Exception {
 		goToMainPage();
-		mainPage= new GocietyMainPage(driver);
-		
-		System.out.println(mainPage.getOptions());
-		
+		mainPage = new GocietyMainPage(driver);
+		// driver.get(GocietyMainPage.getMainPage());
+		// System.out.println(mainPage.getSelectActivity().getText());
+		// System.out.println(mainPage.getOptions().get(2).getText());
+		mainPage.getOptions().get(2).click();
+		mainPage.getOptionsOrderBy().get(1).click();
+		mainPage.getImputLocation().click();
+		mainPage.getImputLocationsendKey().sendKeys("den");
+		System.out.println(mainPage.getSearchResult().getText());
+		mainPage.getSerachResult().get(0).click();
 	}
+
 	private GocietyHomePage goToHomePage() {
 
 		driver.get(GocietyHomePage.getHomePage());
@@ -118,21 +121,22 @@ public class GocietyServiceTest {
 		return homePage;
 
 	}
-	
-	private GocietyLoginPage goToLoginPage(){
-		
+
+	private GocietyLoginPage goToLoginPage() {
+
 		driver.get(GocietyLoginPage.getLoginPage());
 		return loginPage;
 	}
-private GocietyMainPage goToMainPage(){
-		
+
+	private GocietyMainPage goToMainPage() {
+
 		driver.get(GocietyMainPage.getMainPage());
 		return mainPage;
 	}
-	
-	private void login(String username, String password ){
+
+	private void login(String username, String password) {
 		goToLoginPage();
-		loginPage= new GocietyLoginPage(driver);
+		loginPage = new GocietyLoginPage(driver);
 		loginPage.loginAs(username, password);
 	}
 }
