@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -28,6 +29,7 @@ public class GocietyServiceTest {
 	private WebDriver driver;
 	private GocietyHomePage homePage;
 	private GocietyLoginPage loginPage;
+	private GocietyMainPage mainPage;
 
 	@Before
 	public void setUp() throws Exception {
@@ -101,6 +103,14 @@ public class GocietyServiceTest {
       }
 	
 	}
+	@Test
+	public void mainPageTestSelectActivity() throws Exception {
+		goToMainPage();
+		mainPage= new GocietyMainPage(driver);
+		
+		System.out.println(mainPage.getOptions());
+		
+	}
 	private GocietyHomePage goToHomePage() {
 
 		driver.get(GocietyHomePage.getHomePage());
@@ -113,6 +123,11 @@ public class GocietyServiceTest {
 		
 		driver.get(GocietyLoginPage.getLoginPage());
 		return loginPage;
+	}
+private GocietyMainPage goToMainPage(){
+		
+		driver.get(GocietyMainPage.getMainPage());
+		return mainPage;
 	}
 	
 	private void login(String username, String password ){
